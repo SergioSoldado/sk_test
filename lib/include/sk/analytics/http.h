@@ -12,10 +12,10 @@
 
 //! sk ahhtp handle data type
 typedef struct sk_ahttp {
-  sk_handle* sk;
+  sk_handle *sk;
   sk_time_info time_info;
-  char* network_address;
-  int return_code;
+  char *network_address;
+  long response_code;
 } sk_ahttp;
 
 /**
