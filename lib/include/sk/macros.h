@@ -1,9 +1,15 @@
 #ifndef _SK_MACROS
 #define _SK_MACROS
 
+/**
+ * @file       sk/macros.h
+ * @brief      Common declarations for sk.
+ */
+
+// NOTE this shouldn't be defined here in commercial code
 #define _SK_DEBUG
 
-#ifndef _SK_DEBUG
+#ifdef _SK_DEBUG
 #include <assert.h>
 #endif
 
