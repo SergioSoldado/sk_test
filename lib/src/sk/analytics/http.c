@@ -1,13 +1,15 @@
+/**
+ * @file       src/sk/analytics/http.c
+ * @brief      Definitions for sk http analytics.
+ */
+
+
 #include <assert.h>
 #include <curl/curl.h>
 #include <stdlib.h>
 
 #include <sk/analytics/http.h>
 #include <sk/macros.h>
-
-struct _sk_ahttp {
-  sk_handle* sk;
-};
 
 sk_ahttp* sk_ahttp_init() {
   sk_ahttp* ahttp = malloc(sizeof(sk_ahttp));
@@ -37,18 +39,19 @@ static size_t null_writer(void *buffer, size_t size, size_t nmemb, void *userp) 
   return size * nmemb;
 }
 
-sk_ahttp_result sk_ahttp_get(sk_ahttp* ahttp, char* url) {
+sk_ret sk_ahttp_get(sk_ahttp* ahttp, char* uri) {
   assert(ahttp != NULL);
-  assert(url != NULL);
+  assert(ahttp->sk != NULL);
+  assert(uri != NULL);
   assert(ahttp->sk != NULL);
 
   sk_handle* sk = ahttp->sk;
   sk_reset(sk);
-  sk_set_url(sk, url);
+  sk_set_url(sk, uri);
   sk_set_write_callback(sk, null_writer);
   sk_set_http_verb(sk, SK_HTTP_GET);
   sk_perform(sk);
+  sk_get_time_info(sk, &ahttp->time_info);
 
-  sk_ahttp_result res = {0};
-  return res;
+  return SK_OK;
 }

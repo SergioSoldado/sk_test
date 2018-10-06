@@ -1,15 +1,22 @@
 #ifndef __SK_ANALYTICS_HTTP
 #define __SK_ANALYTICS_HTTP
+
 /**
  * @file       sk/analytics/http.h
- * @brief      Functions for http analytics.
+ * @brief      Declarations for sk http analytics.
  */
 
 #include <stddef.h>
 #include <stdbool.h>
 #include <sk/sk.h>
 
-typedef struct _sk_ahttp sk_ahttp;
+//! sk ahhtp handle data type
+typedef struct sk_ahttp {
+  sk_handle* sk;
+  sk_time_info time_info;
+  char* network_address;
+  int return_code;
+} sk_ahttp;
 
 /**
  * @brief Create instance of sk analytics http
@@ -23,10 +30,12 @@ sk_ahttp *sk_ahttp_init(void);
  */
 void sk_ahttp_free(sk_ahttp *ahttp);
 
-typedef struct sk_ahttp_result {
-  int r0;
-} sk_ahttp_result;
-
-sk_ahttp_result sk_ahttp_get(sk_ahttp *ahttp, char *url);
+/**
+ * @brief Perform an http get
+ * @param ahttp ahttp handle
+ * @param url target uri
+ * @return SK_OK if successful, SK_ERROR otherwise
+ */
+sk_ret sk_ahttp_get(sk_ahttp *ahttp, char *uri);
 
 #endif
