@@ -14,7 +14,7 @@ typedef struct _sk_handle sk_handle;
 //! sk return codes
 typedef enum {
   SK_OK,
-  SK_ERROR
+  SK_ERROR,
 } sk_ret;
 
 /**
@@ -63,8 +63,9 @@ typedef size_t (*sk_writer_cb)(void *, size_t, size_t, void *);
  */
 void sk_set_write_callback(sk_handle *sk, sk_writer_cb writer);
 
+//! Types of HTTP verbs
 typedef enum {
-  SK_HTTP_GET
+  SK_HTTP_GET  //! HTTP get
 } SK_HTTP_VERB;
 
 /**
@@ -103,15 +104,16 @@ typedef struct sk_time_info {
  * @brief Get last operation response code
  * @param sk sk_handle used to perform an action
  * @param code pointer to address where code value is written to
- * @return response code
+ * @return SK_OK if successful, SK_ERROR otherwise
  */
-sk_ret sk_get_response_code(sk_handle* sk, long* code);
+sk_ret sk_get_response_code(sk_handle *sk, long *code);
 
 /**
  * @brief Get last operation information
  * @param sk sk_handle used to perform an operation
- * @return transfer time structure value
+ * @param code pointer to previously allocated structure where result is written to
+ * @return SK_OK if successful, SK_ERROR otherwise
  */
-void sk_get_time_info(sk_handle* sk, sk_time_info* time_info);
+sk_ret sk_get_time_info(sk_handle *sk, sk_time_info *time_info);
 
 #endif
