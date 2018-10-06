@@ -2,10 +2,8 @@ cmake_minimum_required(VERSION 3.12)
 project(samknows)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_COMPILER "/usr/bin/clang")
-set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 
-set(COMPILE_FLAGS "-std=c11 -pedantic -fsanitize=address -O3 -Winit-self -Wextra -Wall -Wundef -Wshadow")
+set(COMPILE_FLAGS "-std=c11 -pedantic -O3 -Winit-self -Wextra -Wall -Wundef -Wshadow")
 
 set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
 set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")

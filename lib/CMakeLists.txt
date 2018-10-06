@@ -15,4 +15,4 @@ set(sk_library_src
 
 add_library(sk ${sk_library_src})
 
-target_link_libraries(sk curl asan)
+target_link_libraries(sk curl)
