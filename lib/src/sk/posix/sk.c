@@ -1,13 +1,15 @@
-//
-// Created by serj on 06/10/18.
-//
+/**
+ * @file       src/sk/posix/sk.c
+ * @brief      Definitions for sk posix implementation.
+ */
+
+#include <assert.h>
+#include <stdlib.h>
 
 #include <curl/curl.h>
 
-#include <sk/sk.h>
-#include <stdlib.h>
-#include <assert.h>
 #include <sk/macros.h>
+#include <sk/sk.h>
 
 struct _sk_handle {
   CURL* curl;
@@ -69,7 +71,20 @@ void sk_set_http_verb(sk_handle* sk, SK_HTTP_VERB verb) {
   }
 }
 
-void sk_perform(sk_handle* sk) {
+sk_ret sk_perform(sk_handle* sk) {
   assert_handle(sk);
-  curl_easy_perform(sk->curl);
+  CURLcode res = curl_easy_perform(sk->curl);
+  return res == CURLE_OK? SK_OK : SK_ERROR;
+}
+
+long sk_get_response_code(sk_handle* sk) {
+  assert_handle(sk);
+  long code;
+  curl_easy_getinfo(sk->curl, CURLINFO_RESPONSE_CODE, &code);
+  return code;
+}
+
+void sk_get_time_info(sk_handle* sk, sk_time_info* time_info) {
+  assert_handle(sk);
+  assert(time_info != NULL);
 }
