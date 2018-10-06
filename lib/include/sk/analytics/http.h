@@ -8,7 +8,9 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+
 #include <sk/sk.h>
+#include <sk/data/string_list.h>
 
 //! sk ahhtp handle data type
 typedef struct sk_ahttp {
@@ -36,6 +38,6 @@ void sk_ahttp_free(sk_ahttp *ahttp);
  * @param url target uri
  * @return SK_OK if successful, SK_ERROR otherwise
  */
-sk_ret sk_ahttp_get(sk_ahttp *ahttp, char *uri);
+sk_ret sk_ahttp_get(sk_ahttp *ahttp, char *uri, sk_string_list headers);
 
 #endif

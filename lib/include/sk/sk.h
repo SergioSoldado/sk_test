@@ -8,6 +8,8 @@
 
 #include <stddef.h>
 
+#include <sk/data/string_list.h>
+
 //! sk handle data type
 typedef struct _sk_handle sk_handle;
 
@@ -61,7 +63,7 @@ typedef size_t (*sk_writer_cb)(void *, size_t, size_t, void *);
  * @param sk sk_handle to configure
  * @param writer function called to store the request output
  */
-void sk_set_write_callback(sk_handle *sk, sk_writer_cb writer);
+sk_ret sk_set_write_callback(sk_handle *sk, sk_writer_cb writer);
 
 //! Types of HTTP verbs
 typedef enum {
@@ -73,7 +75,14 @@ typedef enum {
  * @param sk sk_handle to configure
  * @param verb HTTP verb
  */
-void sk_set_http_verb(sk_handle *sk, SK_HTTP_VERB verb);
+sk_ret sk_set_http_verb(sk_handle *sk, SK_HTTP_VERB verb);
+
+/**
+ * @brief Configure the http headers
+ * @param sk sk_handle to configure
+ * @param headers HTTP headers
+ */
+sk_ret sk_set_http_headers(sk_handle *sk, sk_string_list headers);
 
 /**
  * @brief Perform a synchronous operation
@@ -81,6 +90,22 @@ void sk_set_http_verb(sk_handle *sk, SK_HTTP_VERB verb);
  * @return SK_OK if successful, SK_ERROR otherwise
  */
 sk_ret sk_perform(sk_handle *sk);
+
+/**
+ * @brief Get address of last connection
+ * @param sk sk_handle used to perform an action
+ * @param ip pointer to memory that represents address, don't free this pointer, it is managed internally.
+ * @return SK_OK if successful, SK_ERROR otherwise
+ */
+sk_ret sk_get_address(sk_handle *sk, char**ip);
+
+/**
+ * @brief Get last operation response code
+ * @param sk sk_handle used to perform an action
+ * @param code pointer to address where code value is written to
+ * @return SK_OK if successful, SK_ERROR otherwise
+ */
+sk_ret sk_get_response_code(sk_handle *sk, long *code);
 
 /**
  * @brief Contains several transfer time values
@@ -96,17 +121,9 @@ sk_ret sk_perform(sk_handle *sk);
 typedef struct sk_time_info {
   double namelookup_time_secs;  //! name lookup time in seconds
   double connect_time_secs;  //! connect time in seconds
-  double start_transfer_time;  //! start transfer time in seconds
+  double start_transfer_secs;  //! start transfer time in seconds
   double total_time_secs;  //! total time in seconds
 } sk_time_info;
-
-/**
- * @brief Get last operation response code
- * @param sk sk_handle used to perform an action
- * @param code pointer to address where code value is written to
- * @return SK_OK if successful, SK_ERROR otherwise
- */
-sk_ret sk_get_response_code(sk_handle *sk, long *code);
 
 /**
  * @brief Get last operation information

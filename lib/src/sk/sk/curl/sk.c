@@ -43,6 +43,8 @@ sk_handle *sk_new(void) {
 void sk_reset(sk_handle *sk) {
   assert_handle(sk);
   curl_easy_reset(sk->curl);
+  curl_easy_setopt(sk->curl, CURLOPT_FORBID_REUSE, 1L);
+  curl_easy_setopt(sk->curl, CURLOPT_FORBID_REUSE, 1L);
 }
 
 void sk_set_url(sk_handle *sk, char *url) {
@@ -57,25 +59,35 @@ void sk_free(sk_handle *handle) {
   free(handle);
 }
 
-void sk_set_write_callback(sk_handle *sk, sk_writer_cb writer) {
+sk_ret sk_set_write_callback(sk_handle *sk, sk_writer_cb writer) {
   assert_handle(sk);
   assert(writer != NULL);
-  curl_easy_setopt(sk->curl, CURLOPT_WRITEFUNCTION, writer);
+  return curl_to_sk_code(curl_easy_setopt(sk->curl, CURLOPT_WRITEFUNCTION, writer));
 }
 
-void sk_set_http_verb(sk_handle *sk, SK_HTTP_VERB verb) {
+sk_ret sk_set_http_verb(sk_handle *sk, SK_HTTP_VERB verb) {
   assert_handle(sk);
   switch (verb) {
-    case SK_HTTP_GET:curl_easy_setopt(sk->curl, CURLOPT_HTTPGET, 1L);
-      return;
-    default:SK_ERROR("Invalid HTTP verb");
-      return;
+    case SK_HTTP_GET:
+      return curl_to_sk_code(curl_easy_setopt(sk->curl, CURLOPT_HTTPGET, 1L));
+    default:
+      return SK_ERROR;
   }
+}
+
+sk_ret sk_set_http_headers(sk_handle *sk, sk_string_list headers) {
+  assert_handle(sk);
+  return curl_to_sk_code(curl_easy_setopt(sk->curl, CURLOPT_HTTPHEADER, headers));
 }
 
 sk_ret sk_perform(sk_handle *sk) {
   assert_handle(sk);
   return curl_to_sk_code(curl_easy_perform(sk->curl));
+}
+
+sk_ret sk_get_address(sk_handle *sk, char **ip) {
+  assert_handle(sk);
+  return curl_to_sk_code(curl_easy_getinfo(sk->curl, CURLINFO_PRIMARY_IP, ip));
 }
 
 sk_ret sk_get_response_code(sk_handle *sk, long *code) {
